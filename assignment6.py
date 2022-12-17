@@ -33,7 +33,7 @@ def create_df_degrees(non_normalized_db_filename):
     """
 
     # BEGIN SOLUTION
-    conn = create_connection('non_normalized.db')
+    conn = create_connection(non_normalized_db_filename)
     sql_statement = "select * from Students;"
     df = pd.read_sql_query(sql_statement, conn)
     hasho = {"Degree" :df["Degree"].unique()}
@@ -56,7 +56,7 @@ def create_df_exams(non_normalized_db_filename):
     exam_list= []
     unique_exam_and_date = []
 
-    conn = create_connection('non_normalized.db')
+    conn = create_connection(non_normalized_db_filename)
     sql_statement = "select * from Students;"
     df = pd.read_sql_query(sql_statement, conn)
     exam_list = df["Exams"].unique()
@@ -73,7 +73,7 @@ def create_df_exams(non_normalized_db_filename):
     for exam in unique_exam_and_date:
         exam_name, year = exam.split(" (")
         exam_hasho["Exam"].append(exam_name)
-        exam_hasho["Year"].append(year[:-1])     
+        exam_hasho["Year"].append(int(year[:-1]))     
     df_2 = pd.DataFrame.from_dict(exam_hasho)
 
     return df_2
