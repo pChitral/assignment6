@@ -162,9 +162,10 @@ def ex2(df_students):
     # NOTE -- rename name the degree column to Count!!!
     """
     # BEGIN SOLUTION
-    pass
+    df = df_students["Degree"].value_counts().to_frame(name='Count')
+    df = pd.MultiIndex.from_frame(df)
     # END SOLUTION
-    return df
+    return df_students["Degree"].value_counts()
 
 
 def ex3(df_studentexamscores, df_exams):
@@ -178,7 +179,19 @@ def ex3(df_studentexamscores, df_exams):
     """
 
     # BEGIN SOLUTION
-    pass
+    df = pd.merge(df_studentexamscores, df_exams, on='Exam')
+
+    # Group by student and exam, and compute the mean score
+    df_averages = df.groupby(['Exam', 'Year'])['Score'].mean().round(2).reset_index()
+    # Sort the dataframe in descending order by the average score
+    df_averages.sort_values(by='Score', ascending=False, inplace=True)
+    df_averages["Score"].astype("int32")
+    df_averages["Year"] = df_averages["Year"].astype("int32")
+
+    df_averages = df_averages.rename(columns={'Score': 'average'})
+    df_averages.set_index('Exam', inplace=True)
+
+    return df_averages
     # END SOLUTION
     return df
 

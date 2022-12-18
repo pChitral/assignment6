@@ -45,9 +45,8 @@
         },
         {
             "name": "test_ex3 (test_assignment6.TestAssignment6)",
-            "score": 0.0,
+            "score": 3,
             "max_score": 3,
-            "output": "Test Failed: 'Year'\n",
             "visibility": "visible",
             "number": "ex3"
         },
@@ -119,5 +118,5 @@
     "leaderboard": [],
     "visibility": "visible",
     "execution_time": "0.07",
-    "score": 15.0
+    "score": 18.0
 }
