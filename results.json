@@ -23,9 +23,8 @@
         },
         {
             "name": "test_04_df_studentexamscores (test_assignment6.TestAssignment6)",
-            "score": 0.0,
+            "score": 3,
             "max_score": 3,
-            "output": "Test Failed: 'NoneType' object has no attribute 'equals'\n",
             "visibility": "visible",
             "number": "04_df_studentexamscores"
         },
@@ -120,6 +119,6 @@
     ],
     "leaderboard": [],
     "visibility": "visible",
-    "execution_time": "0.06",
-    "score": 9.0
+    "execution_time": "0.07",
+    "score": 12.0
 }

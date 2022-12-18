@@ -74,9 +74,9 @@ def create_df_exams(non_normalized_db_filename):
         exam_name, year = exam.split(" (")
         exam_hasho["Exam"].append(exam_name)
         exam_hasho["Year"].append(int(year[:-1]))     
-    df_2 = pd.DataFrame.from_dict(exam_hasho)
+    df_exams = pd.DataFrame.from_dict(exam_hasho)
 
-    return df_2
+    return df_exams
     # END SOLUTION
 
 
@@ -121,7 +121,31 @@ def create_df_studentexamscores(non_normalized_db_filename, df_students):
     """
 
     # BEGIN SOLUTION
-    pass
+    conn = create_connection("non_normalized.db")
+    sql_statement = "select * from Students;"
+    df = pd.read_sql_query(sql_statement, conn)
+
+    student_exams = df["Exams"]
+    student_scores = df["Scores"]
+    student_ids = df["StudentID"]
+
+    exam_scores_hasho = {
+        "StudentID" : [],
+        "Exam" : [],
+        "Score" : []
+    }
+
+    for i in range(len(student_exams)):
+        ith_student_exams = student_exams[i].split(" ")[::2]
+        ith_student_scores = student_scores[i].split(", ")
+        for j in range(len(ith_student_exams)):
+            exam_scores_hasho["StudentID"].append(i+1)
+            exam_scores_hasho['Exam'].append(ith_student_exams[j])
+            exam_scores_hasho["Score"].append(int(ith_student_scores[j]))
+
+    df_studentexamscores = pd.DataFrame.from_dict(exam_scores_hasho)
+    return df_studentexamscores
+        
     # END SOLUTION
 
 
