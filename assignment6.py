@@ -36,7 +36,7 @@ def create_df_degrees(non_normalized_db_filename):
     conn = create_connection(non_normalized_db_filename)
     sql_statement = "select * from Students;"
     df = pd.read_sql_query(sql_statement, conn)
-    hasho = {"Degree" :df["Degree"].unique()}
+    hasho = {"Degree": df["Degree"].unique()}
     df_2 = pd.DataFrame(hasho)
     return df_2
     # END SOLUTION
@@ -52,8 +52,8 @@ def create_df_exams(non_normalized_db_filename):
     """
 
     # BEGIN SOLUTION
-    
-    exam_list= []
+
+    exam_list = []
     unique_exam_and_date = []
 
     conn = create_connection(non_normalized_db_filename)
@@ -69,11 +69,10 @@ def create_df_exams(non_normalized_db_filename):
                 unique_exam_and_date.append(exam_and_date[i].strip())
     unique_exam_and_date.sort()
 
-
     for exam in unique_exam_and_date:
         exam_name, year = exam.split(" (")
         exam_hasho["Exam"].append(exam_name)
-        exam_hasho["Year"].append(int(year[:-1]))     
+        exam_hasho["Year"].append(int(year[:-1]))
     df_exams = pd.DataFrame.from_dict(exam_hasho)
 
     return df_exams
@@ -94,20 +93,18 @@ def create_df_students(non_normalized_db_filename):
     sql_statement = "select * from Students;"
     df = pd.read_sql_query(sql_statement, conn)
 
-
     student_names = df["Name"]
     student_degrees = df["Degree"]
 
-
-    students_hasho = {"StudentID": [], "First_Name": [], "Last_Name" : [], "Degree": []}
-
+    students_hasho = {"StudentID": [],
+                      "First_Name": [], "Last_Name": [], "Degree": []}
 
     for i in range(len(student_names)):
         students_hasho["StudentID"].append(i+1)
         students_hasho["First_Name"].append(student_names[i].split(", ")[1])
         students_hasho["Last_Name"].append(student_names[i].split(", ")[0])
         students_hasho["Degree"].append(student_degrees[i])
-        
+
     df_students = pd.DataFrame.from_dict(students_hasho)
     return df_students
     # END SOLUTION
@@ -130,9 +127,9 @@ def create_df_studentexamscores(non_normalized_db_filename, df_students):
     student_ids = df["StudentID"]
 
     exam_scores_hasho = {
-        "StudentID" : [],
-        "Exam" : [],
-        "Score" : []
+        "StudentID": [],
+        "Exam": [],
+        "Score": []
     }
 
     for i in range(len(student_exams)):
@@ -145,7 +142,7 @@ def create_df_studentexamscores(non_normalized_db_filename, df_students):
 
     df_studentexamscores = pd.DataFrame.from_dict(exam_scores_hasho)
     return df_studentexamscores
-        
+
     # END SOLUTION
 
 
@@ -237,7 +234,6 @@ def part2_step1():
     # BEGIN SOLUTION
     pass
     # END SOLUTION
-    
 
 
 def part2_step2():
