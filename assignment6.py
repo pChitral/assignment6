@@ -151,7 +151,7 @@ def ex1(df_exams):
     return df_exams sorted by year
     """
     # BEGIN SOLUTION
-    pass
+    df_exams = df_exams.sort_values(by='Year')
     # END SOLUTION
     return df_exams
 
