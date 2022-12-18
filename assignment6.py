@@ -90,7 +90,26 @@ def create_df_students(non_normalized_db_filename):
     """
 
     # BEGIN SOLUTION
-    pass
+    conn = create_connection("non_normalized.db")
+    sql_statement = "select * from Students;"
+    df = pd.read_sql_query(sql_statement, conn)
+
+
+    student_names = df["Name"]
+    student_degrees = df["Degree"]
+
+
+    students_hasho = {"StudentID": [], "First_Name": [], "Last_Name" : [], "Degree": []}
+
+
+    for i in range(len(student_names)):
+        students_hasho["StudentID"].append(i+1)
+        students_hasho["First_Name"].append(student_names[i].split(", ")[1])
+        students_hasho["Last_Name"].append(student_names[i].split(", ")[0])
+        students_hasho["Degree"].append(student_degrees[i])
+        
+    df_students = pd.DataFrame.from_dict(students_hasho)
+    return df_students
     # END SOLUTION
 
 
