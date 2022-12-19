@@ -162,10 +162,10 @@ def ex2(df_students):
     # NOTE -- rename name the degree column to Count!!!
     """
     # BEGIN SOLUTION
-    df = df_students["Degree"].value_counts().to_frame(name='Count')
-    df = pd.MultiIndex.from_frame(df)
+    df = df_students["Degree"].value_counts().to_frame()
+    df.columns=[['Count']]
     # END SOLUTION
-    return df_students["Degree"].value_counts()
+    return df
 
 
 def ex3(df_studentexamscores, df_exams):

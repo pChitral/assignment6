@@ -37,9 +37,8 @@
         },
         {
             "name": "test_ex2 (test_assignment6.TestAssignment6)",
-            "score": 0.0,
+            "score": 3,
             "max_score": 3,
-            "output": "Test Failed: False != True\n",
             "visibility": "visible",
             "number": "ex2"
         },
@@ -117,6 +116,6 @@
     ],
     "leaderboard": [],
     "visibility": "visible",
-    "execution_time": "0.07",
-    "score": 18.0
+    "execution_time": "0.08",
+    "score": 21.0
 }
