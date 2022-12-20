@@ -63,14 +63,14 @@ def create_df_exams(non_normalized_db_filename):
     for index, entire_row_values in df.iterrows():
         for exam_and_year_str in entire_row_values[3].split(', '):
             raw_exam_date_list.append(tuple(exam_and_year_str.split(" ")))
-            
-        for exam, year in raw_exam_date_list:    
+
+        for exam, year in raw_exam_date_list:
             exam_year_list_of_tuples.extend([(exam, int(year[1:-1]))])
 
     df2 = pd.DataFrame(exam_year_list_of_tuples, columns=['Exam', 'Year'])
-    df2 = df2.sort_values(by = ['Exam']).reset_index(drop = True)
+    df2 = df2.sort_values(by=['Exam']).reset_index(drop=True)
 
-    df_exams = df2.drop_duplicates().reset_index(drop = True)
+    df_exams = df2.drop_duplicates().reset_index(drop=True)
 
     return df_exams
     # END SOLUTION
@@ -86,24 +86,14 @@ def create_df_students(non_normalized_db_filename):
     """
 
     # BEGIN SOLUTION
-    conn = create_connection(non_normalized_db_filename)
+    
+    conn = create_connection('non_normalized.db')
     sql_statement = "select * from Students;"
     df = pd.read_sql_query(sql_statement, conn)
-
-    student_names = df["Name"]
-    student_degrees = df["Degree"]
-
-    students_hasho = {"StudentID": [],
-                      "First_Name": [], "Last_Name": [], "Degree": []}
-
-    for i in range(len(student_names)):
-        students_hasho["StudentID"].append(i+1)
-        students_hasho["First_Name"].append(student_names[i].split(", ")[1])
-        students_hasho["Last_Name"].append(student_names[i].split(", ")[0])
-        students_hasho["Degree"].append(student_degrees[i])
-
-    df_students = pd.DataFrame.from_dict(students_hasho)
-    return df_students
+    
+    df[['Last_Name', 'First_Name']] = df['Name'].str.split(', ', expand=True)
+    df['StudentID'] = df['StudentID'].astype(int)
+    return df[['StudentID', 'First_Name', 'Last_Name', 'Degree']]
     # END SOLUTION
 
 
@@ -160,7 +150,7 @@ def ex2(df_students):
     """
     # BEGIN SOLUTION
     df = df_students["Degree"].value_counts().to_frame()
-    df.columns=[['Count']]
+    df.columns = [['Count']]
     # END SOLUTION
     return df
 
@@ -179,7 +169,8 @@ def ex3(df_studentexamscores, df_exams):
     df = pd.merge(df_studentexamscores, df_exams, on='Exam')
 
     # Group by student and exam, and compute the mean score
-    df_averages = df.groupby(['Exam', 'Year'])['Score'].mean().round(2).reset_index()
+    df_averages = df.groupby(['Exam', 'Year'])[
+        'Score'].mean().round(2).reset_index()
     # Sort the dataframe in descending order by the average score
     df_averages.sort_values(by='Score', ascending=False, inplace=True)
     df_averages["Score"].astype("int32")
