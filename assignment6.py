@@ -53,27 +53,24 @@ def create_df_exams(non_normalized_db_filename):
 
     # BEGIN SOLUTION
 
-    exam_list = []
-    unique_exam_and_date = []
-
-    conn = create_connection(non_normalized_db_filename)
+    conn = create_connection('non_normalized.db')
     sql_statement = "select * from Students;"
     df = pd.read_sql_query(sql_statement, conn)
-    exam_list = df["Exams"].unique()
 
-    exam_hasho = {"Exam": [], "Year": []}
-    for i in range(len(exam_list)):
-        exam_and_date = exam_list[i].split(",")
-        for i in range(len(exam_and_date)):
-            if exam_and_date[i].strip() not in unique_exam_and_date:
-                unique_exam_and_date.append(exam_and_date[i].strip())
-    unique_exam_and_date.sort()
+    exam_year_list_of_tuples = []
+    raw_exam_date_list = []
 
-    for exam in unique_exam_and_date:
-        exam_name, year = exam.split(" (")
-        exam_hasho["Exam"].append(exam_name)
-        exam_hasho["Year"].append(int(year[:-1]))
-    df_exams = pd.DataFrame.from_dict(exam_hasho)
+    for index, entire_row_values in df.iterrows():
+        for exam_and_year_str in entire_row_values[3].split(', '):
+            raw_exam_date_list.append(tuple(exam_and_year_str.split(" ")))
+            
+        for exam, year in raw_exam_date_list:    
+            exam_year_list_of_tuples.extend([(exam, int(year[1:-1]))])
+
+    df2 = pd.DataFrame(exam_year_list_of_tuples, columns=['Exam', 'Year'])
+    df2 = df2.sort_values(by = ['Exam']).reset_index(drop = True)
+
+    df_exams = df2.drop_duplicates().reset_index(drop = True)
 
     return df_exams
     # END SOLUTION
