@@ -303,7 +303,7 @@ def part2_step3(df2_scores):
         .T.drop(['count', 'min', '25%', '50%', '75%', 'max'], axis=1)
         .round(2)
     )
-    
+
     df['mean_theoretical'] = mu
     df['std_theoretical'] = sigma
     df['abs_mean_diff'] = round(abs(df['mean'] - df['mean_theoretical']), 2)
@@ -312,7 +312,7 @@ def part2_step3(df2_scores):
 
 
 def part2_step4(df2_students, df2_scores, ):
-    
+
     hw_list = []
     exam_list = []
     max_score = [50, 100, 40, 60, 50, 100, 50, 60, 50]
@@ -324,7 +324,8 @@ def part2_step4(df2_students, df2_scores, ):
     hw_exam_list = hw_list + exam_list
 
     for i in range(len(hw_exam_list)):
-        df2_students[hw_exam_list[i]] = ((df2_scores[hw_exam_list[i]]/max_score[i])*100).round()
+        df2_students[hw_exam_list[i]] = (
+            (df2_scores[hw_exam_list[i]]/max_score[i])*100).round()
     return df2_students
 
 
