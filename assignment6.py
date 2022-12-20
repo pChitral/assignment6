@@ -199,13 +199,24 @@ def ex5(df_studentexamscores, df_students):
 
     """
 
-    pass
+    temp_df = (
+        pd.merge(df_studentexamscores, df_students, on='StudentID')
+        .groupby(['StudentID'])
+        .mean()
+        .round(2)
+        .reset_index()
+        .sort_values(by='Score', ascending=False)
+        .rename(columns={'Score': 'average'})
+    )
+
+    df = pd.merge(temp_df, df_students, on='StudentID')
+    return df[['First_Name', 'Last_Name', 'Degree', 'average']].head(10)
+    
 
 
 # DO NOT MODIFY THIS CELL OR THE SEED
 
 # THIS CELL IMPORTS ALL THE LIBRARIES YOU NEED!!!
-
 
 np.random.seed(0)
 fake = Faker()

@@ -60,7 +60,7 @@
             "name": "test_ex5 (test_assignment6.TestAssignment6)",
             "score": 0.0,
             "max_score": 3,
-            "output": "Test Failed: 'NoneType' object has no attribute 'values'\n",
+            "output": "Test Failed: sort_values() got an unexpected keyword argument 'descending'\n",
             "visibility": "visible",
             "number": "ex5"
         },
