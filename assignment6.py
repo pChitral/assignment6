@@ -32,14 +32,12 @@ def create_df_degrees(non_normalized_db_filename):
     the degrees. See screenshot below. 
     """
 
-    # BEGIN SOLUTION
     conn = create_connection(non_normalized_db_filename)
     sql_statement = "select * from Students;"
     df = pd.read_sql_query(sql_statement, conn)
     hasho = {"Degree": df["Degree"].unique()}
-    df_2 = pd.DataFrame(hasho)
-    return df_2
-    # END SOLUTION
+
+    return pd.DataFrame(hasho)
 
 
 def create_df_exams(non_normalized_db_filename):
@@ -51,9 +49,7 @@ def create_df_exams(non_normalized_db_filename):
     # https://stackoverflow.com/a/36108422
     """
 
-    # BEGIN SOLUTION
-
-    conn = create_connection('non_normalized.db')
+    conn = create_connection(non_normalized_db_filename)
     sql_statement = "select * from Students;"
     df = pd.read_sql_query(sql_statement, conn)
 
@@ -73,7 +69,6 @@ def create_df_exams(non_normalized_db_filename):
     df_exams = df2.drop_duplicates().reset_index(drop=True)
 
     return df_exams
-    # END SOLUTION
 
 
 def create_df_students(non_normalized_db_filename):
@@ -85,16 +80,13 @@ def create_df_students(non_normalized_db_filename):
     hint: use .split on the column name!
     """
 
-    # BEGIN SOLUTION
-    
-    conn = create_connection('non_normalized.db')
+    conn = create_connection(non_normalized_db_filename)
     sql_statement = "select * from Students;"
     df = pd.read_sql_query(sql_statement, conn)
-    
+
     df[['Last_Name', 'First_Name']] = df['Name'].str.split(', ', expand=True)
     df['StudentID'] = df['StudentID'].astype(int)
     return df[['StudentID', 'First_Name', 'Last_Name', 'Degree']]
-    # END SOLUTION
 
 
 def create_df_studentexamscores(non_normalized_db_filename, df_students):
@@ -103,44 +95,42 @@ def create_df_studentexamscores(non_normalized_db_filename, df_students):
     contains StudentID, exam and score
     See screenshot below. 
     """
-
-    # BEGIN SOLUTION
-    conn = create_connection("non_normalized.db")
+    conn = create_connection(non_normalized_db_filename)
     sql_statement = "select * from Students;"
     df = pd.read_sql_query(sql_statement, conn)
 
-    student_exams = df["Exams"]
-    student_scores = df["Scores"]
-    student_ids = df["StudentID"]
+    student_exam_scores = []
+    for index, row in df.iterrows():
 
-    exam_scores_hasho = {
-        "StudentID": [],
-        "Exam": [],
-        "Score": []
-    }
+        list_of_ith_exams = list(
+            map(lambda x: (x.split(" ")[0]), row[3].split(', ')))
+        list_of_ith_scores = list(
+            map(lambda x: int(x.split(" ")[0]), row[4].split(', ')))
 
-    for i in range(len(student_exams)):
-        ith_student_exams = student_exams[i].split(" ")[::2]
-        ith_student_scores = student_scores[i].split(", ")
-        for j in range(len(ith_student_exams)):
-            exam_scores_hasho["StudentID"].append(i+1)
-            exam_scores_hasho['Exam'].append(ith_student_exams[j])
-            exam_scores_hasho["Score"].append(int(ith_student_scores[j]))
+        for i in range(len(list_of_ith_exams)):
+            student_exam_scores.append(
+                [int(row[0]), list_of_ith_exams[i], list_of_ith_scores[i]])
 
-    df_studentexamscores = pd.DataFrame.from_dict(exam_scores_hasho)
-    return df_studentexamscores
+    student_id_list = []
+    exam_list = []
+    score_list = []
 
-    # END SOLUTION
+    for id_exam_score in student_exam_scores:
+        student_id_list.append(id_exam_score[0])
+        exam_list.append(id_exam_score[1])
+        score_list.append(id_exam_score[2])
+
+    exam_score_hasho = {'StudentID': student_id_list,
+                        'Exam': exam_list, 'Score': score_list}
+
+    return pd.DataFrame.from_dict(exam_score_hasho)
 
 
 def ex1(df_exams):
     """
     return df_exams sorted by year
     """
-    # BEGIN SOLUTION
-    df_exams = df_exams.sort_values(by='Year')
-    # END SOLUTION
-    return df_exams
+    return df_exams.sort_values(by='Year')
 
 
 def ex2(df_students):
@@ -148,10 +138,8 @@ def ex2(df_students):
     return a df frame with the degree count
     # NOTE -- rename name the degree column to Count!!!
     """
-    # BEGIN SOLUTION
     df = df_students["Degree"].value_counts().to_frame()
     df.columns = [['Count']]
-    # END SOLUTION
     return df
 
 
@@ -165,7 +153,6 @@ def ex3(df_studentexamscores, df_exams):
     # round to two decimal places
     """
 
-    # BEGIN SOLUTION
     df = pd.merge(df_studentexamscores, df_exams, on='Exam')
 
     # Group by student and exam, and compute the mean score
@@ -180,8 +167,6 @@ def ex3(df_studentexamscores, df_exams):
     df_averages.set_index('Exam', inplace=True)
 
     return df_averages
-    # END SOLUTION
-    return df
 
 
 def ex4(df_studentexamscores, df_students):
@@ -194,10 +179,15 @@ def ex4(df_studentexamscores, df_students):
     # round to two decimal places
     """
 
-    # BEGIN SOLUTION
-    pass
-    # END SOLUTION
-    return df
+    df = (
+        pd.merge(df_studentexamscores, df_students, on='StudentID')
+        .groupby(['Degree'])
+        .mean()
+        .round(2)
+        .rename(columns={'Score': 'Average'})
+    )
+
+    return df['Average'].to_frame()
 
 
 def ex5(df_studentexamscores, df_students):
@@ -209,9 +199,7 @@ def ex5(df_studentexamscores, df_students):
 
     """
 
-    # BEGIN SOLUTION
     pass
-    # END SOLUTION
 
 
 # DO NOT MODIFY THIS CELL OR THE SEED
@@ -232,9 +220,7 @@ def part2_step1():
     Faker.seed(0)
     # ---- DO NOT CHANGE
 
-    # BEGIN SOLUTION
     pass
-    # END SOLUTION
 
 
 def part2_step2():
@@ -243,30 +229,20 @@ def part2_step2():
     np.random.seed(0)
     # ---- DO NOT CHANGE
 
-    # BEGIN SOLUTION
     pass
-    # END SOLUTION
 
 
 def part2_step3(df2_scores):
-    # BEGIN SOLUTION
     pass
-    # END SOLUTION
 
 
 def part2_step4(df2_students, df2_scores, ):
-    # BEGIN SOLUTION
     pass
-    # END SOLUTION
 
 
 def part2_step5():
-    # BEGIN SOLUTION
     pass
-    # END SOLUTION
 
 
 def part2_step6():
-    # BEGIN SOLUTION
     pass
-    # END SOLUTION

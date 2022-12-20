@@ -51,9 +51,8 @@
         },
         {
             "name": "test_ex4 (test_assignment6.TestAssignment6)",
-            "score": 0.0,
+            "score": 3,
             "max_score": 3,
-            "output": "Test Failed: False != True\n",
             "visibility": "visible",
             "number": "ex4"
         },
@@ -117,5 +116,5 @@
     "leaderboard": [],
     "visibility": "visible",
     "execution_time": "0.19",
-    "score": 21.0
+    "score": 24.0
 }
