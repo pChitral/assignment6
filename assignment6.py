@@ -138,7 +138,11 @@ def ex2(df_students):
     return a df frame with the degree count
     # NOTE -- rename name the degree column to Count!!!
     """
-    df = df_students["Degree"].value_counts().to_frame()
+    df = (
+        df_students["Degree"]
+        .value_counts()
+        .to_frame()
+    )
     df.columns = [['Count']]
     return df
 
@@ -155,12 +159,17 @@ def ex3(df_studentexamscores, df_exams):
 
     df = pd.merge(df_studentexamscores, df_exams, on='Exam')
 
-    # Group by student and exam, and compute the mean score
-    df_averages = df.groupby(['Exam', 'Year'])[
-        'Score'].mean().round(2).reset_index()
-    # Sort the dataframe in descending order by the average score
+    df_averages = (
+        df
+        .groupby(['Exam', 'Year'])[
+            'Score']
+        .mean()
+        .round(2)
+        .reset_index()
+    )
+
     df_averages.sort_values(by='Score', ascending=False, inplace=True)
-    df_averages["Score"].astype("int32")
+
     df_averages["Year"] = df_averages["Year"].astype("int32")
 
     df_averages = df_averages.rename(columns={'Score': 'average'})
@@ -211,13 +220,11 @@ def ex5(df_studentexamscores, df_students):
 
     df = pd.merge(temp_df, df_students, on='StudentID')
     return df[['First_Name', 'Last_Name', 'Degree', 'average']].head(10)
-    
 
 
 # DO NOT MODIFY THIS CELL OR THE SEED
 
 # THIS CELL IMPORTS ALL THE LIBRARIES YOU NEED!!!
-
 np.random.seed(0)
 fake = Faker()
 Faker.seed(0)

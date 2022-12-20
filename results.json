@@ -58,9 +58,8 @@
         },
         {
             "name": "test_ex5 (test_assignment6.TestAssignment6)",
-            "score": 0.0,
+            "score": 3,
             "max_score": 3,
-            "output": "Test Failed: sort_values() got an unexpected keyword argument 'descending'\n",
             "visibility": "visible",
             "number": "ex5"
         },
@@ -116,5 +115,5 @@
     "leaderboard": [],
     "visibility": "visible",
     "execution_time": "0.19",
-    "score": 24.0
+    "score": 27.0
 }
