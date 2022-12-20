@@ -86,9 +86,8 @@
         },
         {
             "name": "test_part2_step04 (test_assignment6.TestAssignment6)",
-            "score": 0.0,
+            "score": 3,
             "max_score": 3,
-            "output": "Test Failed: 'NoneType' object has no attribute 'values'\n",
             "visibility": "visible",
             "number": "part2_step04"
         },
@@ -111,6 +110,6 @@
     ],
     "leaderboard": [],
     "visibility": "visible",
-    "execution_time": "0.22",
-    "score": 36.0
+    "execution_time": "0.23",
+    "score": 39.0
 }

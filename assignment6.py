@@ -312,7 +312,20 @@ def part2_step3(df2_scores):
 
 
 def part2_step4(df2_students, df2_scores, ):
-    pass
+    
+    hw_list = []
+    exam_list = []
+    max_score = [50, 100, 40, 60, 50, 100, 50, 60, 50]
+
+    for i in range(5):
+        hw_list.append((f"Hw{i+1}"))
+        if i <= 3:
+            exam_list.append((f"Exam{i+1}"))
+    hw_exam_list = hw_list + exam_list
+
+    for i in range(len(hw_exam_list)):
+        df2_students[hw_exam_list[i]] = ((df2_scores[hw_exam_list[i]]/max_score[i])*100).round()
+    return df2_students
 
 
 def part2_step5():
