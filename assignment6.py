@@ -89,7 +89,7 @@ def create_df_students(non_normalized_db_filename):
     """
 
     # BEGIN SOLUTION
-    conn = create_connection("non_normalized.db")
+    conn = create_connection(non_normalized_db_filename)
     sql_statement = "select * from Students;"
     df = pd.read_sql_query(sql_statement, conn)
 
