@@ -270,7 +270,6 @@ def part2_step2():
     sigma = [9, 15, 7, 10, 5, 20, 8, 9, 10]
     max_score = [50, 100, 40, 60, 50, 100, 50, 60, 50]
 
-    # Generate the scores using a normal distribution
     scores = np.random.normal(mu, sigma, size=(100, 9))
     scores = np.round(scores)
     scores_clip = np.clip(scores, 0, max_score)
@@ -295,7 +294,21 @@ def part2_step2():
 
 
 def part2_step3(df2_scores):
-    pass
+    mu = [35, 75, 25, 45, 45, 75, 25, 45, 35]
+    sigma = [9, 15, 7, 10, 5, 20, 8, 9, 10]
+
+    df = (
+        df2_scores
+        .describe()
+        .T.drop(['count', 'min', '25%', '50%', '75%', 'max'], axis=1)
+        .round(2)
+    )
+    
+    df['mean_theoretical'] = mu
+    df['std_theoretical'] = sigma
+    df['abs_mean_diff'] = round(abs(df['mean'] - df['mean_theoretical']), 2)
+    df['abs_std_diff'] = round(abs(df['std'] - df['std_theoretical']), 2)
+    return df
 
 
 def part2_step4(df2_students, df2_scores, ):
