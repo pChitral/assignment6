@@ -120,8 +120,11 @@ def create_df_studentexamscores(non_normalized_db_filename, df_students):
         exam_list.append(id_exam_score[1])
         score_list.append(id_exam_score[2])
 
-    exam_score_hasho = {'StudentID': student_id_list,
-                        'Exam': exam_list, 'Score': score_list}
+    exam_score_hasho = {
+        'StudentID': student_id_list,
+        'Exam': exam_list,
+        'Score': score_list
+    }
 
     return pd.DataFrame.from_dict(exam_score_hasho)
 
@@ -168,11 +171,9 @@ def ex3(df_studentexamscores, df_exams):
         .reset_index()
     )
 
-    df_averages.sort_values(by='Score', ascending=False, inplace=True)
-
-    df_averages["Year"] = df_averages["Year"].astype("int32")
-
     df_averages = df_averages.rename(columns={'Score': 'average'})
+    df_averages.sort_values(by='average', ascending=False, inplace=True)
+    df_averages["Year"] = df_averages["Year"].astype("int32")
     df_averages.set_index('Exam', inplace=True)
 
     return df_averages

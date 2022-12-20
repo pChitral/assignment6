@@ -107,13 +107,13 @@
             "name": "test_part2_step06 (test_assignment6.TestAssignment6)",
             "score": 0.0,
             "max_score": 3,
-            "output": "Test Failed: 'NoneType' object has no attribute 'values'\n",
+            "output": "Test Failed: can only concatenate str (not \"numpy.float64\") to str\n",
             "visibility": "visible",
             "number": "part2_step06"
         }
     ],
     "leaderboard": [],
     "visibility": "visible",
-    "execution_time": "0.19",
+    "execution_time": "0.21",
     "score": 27.0
 }
