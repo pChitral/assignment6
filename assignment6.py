@@ -239,7 +239,25 @@ def part2_step1():
     Faker.seed(0)
     # ---- DO NOT CHANGE
 
-    pass
+    # BEGIN SOLUTION
+    first_name_list = []
+    last_name_list = []
+    username_list = []
+
+    for i in range(100):
+        fullname = fake.name().split(" ", 1)
+        random_digits = str(np.random.randint(1000, 9999))
+        first_name_list.append(fullname[0])
+        last_name_list.append(fullname[1])
+        username_list.append(fullname[0].lower()[0:2]+random_digits)
+
+    dicto = {
+        'username': username_list,
+        'first_name': first_name_list,
+        'last_name': last_name_list
+    }
+
+    return pd.DataFrame.from_dict(dicto)
 
 
 def part2_step2():
@@ -248,7 +266,32 @@ def part2_step2():
     np.random.seed(0)
     # ---- DO NOT CHANGE
 
-    pass
+    mu = [35, 75, 25, 45, 45, 75, 25, 45, 35]
+    sigma = [9, 15, 7, 10, 5, 20, 8, 9, 10]
+    max_score = [50, 100, 40, 60, 50, 100, 50, 60, 50]
+
+    # Generate the scores using a normal distribution
+    scores = np.random.normal(mu, sigma, size=(100, 9))
+    scores = np.round(scores)
+    scores_clip = np.clip(scores, 0, max_score)
+    series_maal = scores_clip.T
+
+    hw_list = []
+    exam_list = []
+    hasho = {}
+
+    for i in range(5):
+        hw_list.append((f"Hw{i+1}"))
+        if i <= 3:
+            exam_list.append((f"Exam{i+1}"))
+
+    hw_exam_list = hw_list + exam_list
+
+    for i in range(len(hw_exam_list)):
+        hasho[hw_exam_list[i]] = series_maal[i]
+    hasho
+
+    return pd.DataFrame.from_dict(hasho)
 
 
 def part2_step3(df2_scores):
