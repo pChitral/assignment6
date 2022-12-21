@@ -337,12 +337,81 @@ def part2_step5():
         list_of_dfs.append(df[df[df_columns[i]] == "AI_ISSUE"])
     final_df = pd.concat(list_of_dfs, axis=0)
     final_df['index1'] = final_df.index
-    mega_final_df = final_df.groupby(final_df.columns.tolist(),as_index=False).size()
-    mega_final_df.sort_values(by = 'index1',inplace = True)
-    mega_final_df = mega_final_df.rename(columns ={'size':'AI_Count'})
-    return mega_final_df[['username','first_name','last_name','AI_Count']].reset_index(drop = True)
-
+    mega_final_df = final_df.groupby(
+        final_df.columns.tolist(), as_index=False).size()
+    mega_final_df.sort_values(by='index1', inplace=True)
+    mega_final_df = mega_final_df.rename(columns={'size': 'AI_Count'})
+    return mega_final_df[['username', 'first_name', 'last_name', 'AI_Count']].reset_index(drop=True)
 
 
 def part2_step6():
-    pass
+
+    import pandas as pd
+    import numpy as np
+    
+    def grade(val):
+        if val in range(80, 101):
+            return "A"
+        if val in range(70, 80):
+            return "B"
+        if val in range(50, 70):
+            return "C"
+        if val in range(40, 50):
+            return "D"
+        if val in range(0, 40):
+            return "F"
+        
+    df = pd.read_csv('part2_step5-input.csv')
+
+    df_columns = list(df.columns)
+    homework_and_exam_list = df_columns[3:]
+    homework_list = df_columns[3:8]
+    exam_list = df_columns[-4:]
+
+    df = df.replace("AI_ISSUE", 0)
+
+    df[homework_and_exam_list] = df[homework_and_exam_list].astype(float)
+
+    for i, row in df.iterrows():
+        ith_homework_mean = (row[homework_list]).mean()
+        ith_exam_mean = (row[exam_list]).mean()
+
+        for homework in homework_list:
+            if (np.isnan(row[homework])):
+                row[homework] = ith_homework_mean
+
+        for exam in exam_list:
+            if (np.isnan(row[exam])):
+                row[exam] = ith_exam_mean
+        df.loc[i] = row
+
+    df[homework_and_exam_list] = df[homework_and_exam_list].round()
+
+    
+
+    df['Grade'] = (
+        df.iloc[:, 3:8].sum(axis=1) * 0.05 +
+        df.iloc[:, 8:11].sum(axis=1) * 0.20 +
+        df.iloc[:, 11] * 0.15).round()
+
+    letter_grades_list = []
+    
+    for number_grade in df['Grade']:
+        letter_grades_list.append(grade(number_grade))
+        
+    df['LetterGrade'] = letter_grades_list
+    homework_and_exam_list.append("Grade")
+
+    mean_and_sd = df[homework_and_exam_list]
+
+    nan_value = np.nan
+    mean_and_sd = mean_and_sd.describe(include='all').loc[['mean', 'std'], :]
+    mean_and_sd.loc[:, ['username', 'first_name', 'last_name']] = nan_value
+    df = pd.concat([df, mean_and_sd])
+
+
+    df[homework_and_exam_list] = df[homework_and_exam_list].round()
+
+    df.index = df.index.astype(str)
+
+    return df
