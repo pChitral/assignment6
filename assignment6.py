@@ -330,7 +330,18 @@ def part2_step4(df2_students, df2_scores, ):
 
 
 def part2_step5():
-    pass
+    df = pd.read_csv('part2_step5-input.csv')
+    df_columns = list(df.columns)
+    list_of_dfs = []
+    for i in range(4, len(df_columns)):
+        list_of_dfs.append(df[df[df_columns[i]] == "AI_ISSUE"])
+    final_df = pd.concat(list_of_dfs, axis=0)
+    final_df['index1'] = final_df.index
+    mega_final_df = final_df.groupby(final_df.columns.tolist(),as_index=False).size()
+    mega_final_df.sort_values(by = 'index1',inplace = True)
+    mega_final_df = mega_final_df.rename(columns ={'size':'AI_Count'})
+    return mega_final_df[['username','first_name','last_name','AI_Count']].reset_index(drop = True)
+
 
 
 def part2_step6():
