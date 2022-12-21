@@ -348,7 +348,7 @@ def part2_step6():
 
     import pandas as pd
     import numpy as np
-    
+
     def grade(val):
         if val in range(80, 101):
             return "A"
@@ -360,7 +360,7 @@ def part2_step6():
             return "D"
         if val in range(0, 40):
             return "F"
-        
+
     df = pd.read_csv('part2_step5-input.csv')
 
     df_columns = list(df.columns)
@@ -387,18 +387,16 @@ def part2_step6():
 
     df[homework_and_exam_list] = df[homework_and_exam_list].round()
 
-    
-
     df['Grade'] = (
         df.iloc[:, 3:8].sum(axis=1) * 0.05 +
         df.iloc[:, 8:11].sum(axis=1) * 0.20 +
         df.iloc[:, 11] * 0.15).round()
 
     letter_grades_list = []
-    
+
     for number_grade in df['Grade']:
         letter_grades_list.append(grade(number_grade))
-        
+
     df['LetterGrade'] = letter_grades_list
     homework_and_exam_list.append("Grade")
 
@@ -408,7 +406,6 @@ def part2_step6():
     mean_and_sd = mean_and_sd.describe(include='all').loc[['mean', 'std'], :]
     mean_and_sd.loc[:, ['username', 'first_name', 'last_name']] = nan_value
     df = pd.concat([df, mean_and_sd])
-
 
     df[homework_and_exam_list] = df[homework_and_exam_list].round()
 
